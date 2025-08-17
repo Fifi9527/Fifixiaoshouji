@@ -10,6 +10,7 @@ let posts = [
     content: "这是我的第一条朋友圈",
     images: ["https://placekitten.com/200/200"],
     likes: 5,
+    liked: false,
     comments: [
       { id: 1, friendId: 1, text: "自拍不错" }
     ]
@@ -53,7 +54,7 @@ function renderHome() {
 // 渲染聊天界面
 function renderChat(friendId) {
   const friend = friends.find(f => f.id === friendId);
-  friend.unread = 0; // 清除未读
+  friend.unread = 0;
   
   document.getElementById('app').innerHTML = `
     <div class="chat-header wechat-green" style="padding:10px;display:flex;justify-content:space-between">
@@ -65,9 +66,7 @@ function renderChat(friendId) {
     <div id="messages" style="height:calc(100vh - 120px);overflow-y:auto;padding:10px"></div>
     
     <div style="position:fixed;bottom:0;width:100%;background:#f5f5f5;padding:8px;display:flex">
-      <div style="position:relative">
-        <button onclick="toggleEmojiPanel()" style="font-size:20px;background:none;border:none">➕</button>
-      </div>
+      <button onclick="toggleEmojiPanel()" style="font-size:20px;background:none;border:none">➕</button>
       <input id="chat-input" type="text" style="flex:1;padding:8px;border-radius:4px;border:1px solid #ddd">
       <button onclick="sendMessage(${friendId})" class="wechat-green" style="margin-left:5px">发送</button>
     </div>
@@ -104,16 +103,13 @@ function sendMessage(friendId) {
   `;
   input.value = '';
   
-  // 模拟AI回复
   setTimeout(() => {
     messagesDiv.innerHTML += `
-      <div class="message ai">已收到你的消息: ${content}</div>
+      <div class="message ai">收到: ${content}</div>
     `;
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    checkNotifications(); // 触发通知
+    checkNotifications();
   }, 1000);
-  
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 /************** 朋友圈功能 **************/
@@ -143,4 +139,6 @@ function renderMoments() {
                 ${post.images.map(img => `<img src="${img}">`).join('')}
               </div>
             ` : ''}
-           
+            <div style="margin-top:8px;color:#888">
+              <span>❤️ ${post.likes}赞</span>
+              <button onclick="toggle
